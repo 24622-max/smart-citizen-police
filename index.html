@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스마트 AI 경찰 안내소</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a237e, #43a047); /* 경찰 느낌의 신뢰감을 주는 색상 변경 */
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    .container {
+      width: min(900px, 92%);
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 28px;
+      color: #1a237e;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 28px;
+      font-size: 14px;
+    }
+
+    /* 섹션 스타일 */
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #1a237e;
+      border-left: 4px solid #1a237e;
+      padding-left: 8px;
+      margin-bottom: 12px;
+    }
+
+    .section-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .auth-box {
+      max-width: 420px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input, textarea {
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 100px;
+      padding: 12px 14px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #1a237e;
+      box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.15);
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0 16px;
+      height: 46px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    /* 버튼 색상 커스텀 */
+    .login-btn { background: #1a237e; color: white; }
+    .signup-btn { background: #455a64; color: white; }
+    .logout-btn { background: #ef5350; color: white; }
+    .add-btn { background: #2e7d32; color: white; }
+    .ai-btn { background: #0288d1; color: white; }
+    .tts-btn { background: #ff9800; color: white; }
+    .refresh-btn { background: #78909c; color: white; margin-bottom: 16px;}
+    .edit-btn { background: #ffca28; color: #333; }
+    .delete-btn { background: #ef5350; color: white; }
+    .save-btn { background: #4caf50; color: white; }
+    .cancel-btn { background: #b0bec5; color: white; }
+
+    .form-box {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #e8eaf6;
+    }
+
+    .user-info {
+      font-size: 14px;
+      color: #1a237e;
+      strong { font-weight: bold; }
+    }
+
+    .status {
+      min-height: 24px;
+      margin-bottom: 14px;
+      color: #666;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #edf1f5;
+    }
+
+    .item-title { margin: 0 0 6px; font-size: 18px; font-weight: bold; color: #1a237e; }
+    .item-content { margin: 0; color: #555; line-height: 1.5; word-break: break-all; }
+    .item-date { margin-top: 8px; font-size: 12px; color: #999; }
+    .item-actions { display: flex; gap: 8px; }
+
+    .edit-box {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto auto;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .answer-box {
+      min-height: 120px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 10px;
+    }
+
+    .empty { text-align: center; padding: 20px; color: #888; }
+    .hidden { display: none; }
+    .notice { max-width: 420px; margin: 20px auto 0; padding: 14px; border-radius: 14px; background: #fff8e1; color: #6d4c41; font-size: 13px; line-height: 1.6; }
+    .flex-row { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
+
+    @media (max-width: 700px) {
+      .form-box, .item, .edit-box, .top-bar { grid-template-columns: 1fr; flex-direction: column; }
+      .item-actions { justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚔 스마트 AI 경찰 안내소</h1>
+    <div class="subtitle">Firebase와 생성형 AI를 결합한 민원 대처 시스템</div>
+
+    <section id="authSection">
+      <div class="auth-box">
+        <h2>경찰관/시민 로그인</h2>
+        <input id="emailInput" type="email" placeholder="이메일 주소 입력" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" />
+        <button class="login-btn" id="loginBtn">로그인</button>
+        <button class="signup-btn" id="signupBtn">회원가입</button>
+      </div>
+      <div class="notice">
+        처음 방문하셨다면 이메일과 비밀번호 입력 후 <strong>회원가입</strong>을, 계정이 있다면 <strong>로그인</strong>을 해주세요.
+      </div>
+    </section>
+
+    <section id="mainSection" class="hidden">
+      <div class="top-bar">
+        <div class="user-info">접속 계정: <strong id="userEmail"></strong></div>
+        <button class="logout-btn" id="logoutBtn">로그아웃</button>
+      </div>
+
+      <div class="section-card">
+        <h2>🤖 AI 경찰관 실시간 상담 (TTS 지원)</h2>
+        <p style="font-size: 14px; color:#555;">피해 사실이나 법률 의문점을 적고 AI 경찰관에게 자문을 구하세요.</p>
+        <textarea id="aiQuestionInput" placeholder="예시: 중고거래 사기를 당했는데 어떻게 신고해야 하나요? 절차가 궁금합니다."></textarea>
+        <div class="flex-row">
+          <button class="ai-btn" id="askAiBtn">AI 자문 구하기</button>
+          <button class="tts-btn" id="ttsBtn" disabled>🔊 답변 읽어주기</button>
+        </div>
+        <div id="aiAnswerBox" class="answer-box">아직 상담 내용이 없습니다. 질문을 입력해보세요.</div>
+      </div>
+
+      <div class="section-card">
+        <h2>📂 나의 사건/민원 접수 기록 리스트</h2>
+        <div class="form-box">
+          <input id="titleInput" type="text" placeholder="사건/민원 제목 (예: 중고 사기 건)" />
+          <input id="contentInput" type="text" placeholder="상세 내용 기록" />
+          <button class="add-btn" id="addBtn">기록 추가</button>
+        </div>
+
+        <button class="refresh-btn" id="refreshBtn">새로고침</button>
+        <div id="status" class="status"></div>
+        <div id="dataList" class="list"></div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getDatabase, ref, push, set, update, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    // 귀하의 Firebase 설정값 유지
+    const firebaseConfig = {
+      apiKey: 'AIzaSyDO-v52Ehwphh5gW0WBzu9_DliMhOzy4Yo',
+      authDomain: 'kang-f4e85.firebaseapp.com',
+      databaseURL: 'https://kang-f4e85-default-rtdb.firebaseio.com',
+      projectId: 'kang-f4e85',
+      storageBucket: 'kang-f4e85.firebasestorage.app',
+      messagingSenderId: '107057126084',
+      appId: '1:107057126084:web:30f7bcb3f25dd2aa4a0791',
+      measurementId: 'G-DJ52YTYQZM'
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // Google Apps Script URL (제공해주신 API 엔드포인트)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxTmD_aKFktnu5BcmOj0x84D15A5qOEkAbpoyJ7DEGzJR7UayIGwKLDL7nFhU3hbB_wVw/exec';
+
+    // DOM 요소 연결
+    const authSection = document.getElementById('authSection');
+    const mainSection = document.getElementById('mainSection');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userEmail = document.getElementById('userEmail');
+    
+    const titleInput = document.getElementById('titleInput');
+    const contentInput = document.getElementById('contentInput');
+    const addBtn = document.getElementById('addBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const dataList = document.getElementById('dataList');
+    const statusBox = document.getElementById('status');
+
+    const aiQuestionInput = document.getElementById('aiQuestionInput');
+    const aiAnswerBox = document.getElementById('aiAnswerBox');
+    const askAiBtn = document.getElementById('askAiBtn');
+    const ttsBtn = document.getElementById('ttsBtn');
+
+    let currentUser = null;
+    let currentItemsRef = null;
+
+    function setStatus(message) { statusBox.textContent = message; }
+
+    // --- [1] Firebase Authentication (로그인/회원가입) 처리 ---
+    function getAccountInfo() {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!email || !password) { alert('이메일과 비밀번호를 입력해주세요.'); return null; }
+      if (password.length < 6) { alert('비밀번호는 6자리 이상이어야 합니다.'); return null; }
+      return { email, password };
+    }
+
+    signupBtn.addEventListener('click', async () => {
+      const account = getAccountInfo(); if (!account) return;
+      try {
+        await createUserWithEmailAndPassword(auth, account.email, account.password);
+        alert('회원가입이 완료되었습니다!');
+      } catch (error) { alert(getKoreanErrorMessage(error.code)); }
+    });
+
+    loginBtn.addEventListener('click', async () => {
+      const account = getAccountInfo(); if (!account) return;
+      try { await signInWithEmailAndPassword(auth, account.email, account.password); } 
+      catch (error) { alert(getKoreanErrorMessage(error.code)); }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      try { window.speechSynthesis.cancel(); await signOut(auth); } catch (e) { alert('로그아웃 실패'); }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        authSection.classList.add('hidden');
+        mainSection.classList.remove('hidden');
+        userEmail.textContent = user.email;
+        startRealtimeDataListener(user.uid);
+      } else {
+        currentUser = null;
+        authSection.classList.remove('hidden');
+        mainSection.classList.add('hidden');
+        dataList.innerHTML = '';
+      }
+    });
+
+    // --- [2] Firebase Realtime DB 연동 (사건기록 CRUD) ---
+    function startRealtimeDataListener(uid) {
+      stopRealtimeDataListener();
+      setStatus('기록을 실시간으로 동기화하는 중...');
+      currentItemsRef = ref(database, `users/${uid}/items`);
+      onValue(currentItemsRef, (snapshot) => {
+        renderData(snapshot.val());
+        setStatus('데이터 동기화 완료.');
+      }, (err) => { setStatus('데이터 로드 실패. 규칙을 확인하세요.'); });
+    }
+
+    function stopRealtimeDataListener() { if (currentItemsRef) { off(currentItemsRef); currentItemsRef = null; } }
+
+    addBtn.addEventListener('click', async () => {
+      if (!currentUser) return;
+      const title = titleInput.value.trim();
+      const content = contentInput.value.trim();
+      if (!title || !content) { alert('제목과 내용을 적어주세요.'); return; }
+      try {
+        const itemsRef = ref(database, `users/${currentUser.uid}/items`);
+        await set(push(itemsRef), { title, content, createdAt: new Date().toLocaleString('ko-KR'), updatedAt: '' });
+        titleInput.value = ''; contentInput.value = '';
+      } catch (e) { alert('추가 실패'); }
+    });
+
+    window.deleteData = async function(id) {
+      if (!currentUser || !confirm('이 기록을 삭제하시겠습니까?')) return;
+      try { await remove(ref(database, `users/${currentUser.uid}/items/${id}`)); } catch (e) { alert('삭제 실패'); }
+    };
+
+    window.updateData = async function(id) {
+      const editTitle = document.getElementById(`edit-title-${id}`).value.trim();
+      const editContent = document.getElementById(`edit-content-${id}`).value.trim();
+      if (!editTitle || !editContent) { alert('빈칸을 채워주세요.'); return; }
+      try {
+        await update(ref(database, `users/${currentUser.uid}/items/${id}`), { title: editTitle, content: editContent, updatedAt: new Date().toLocaleString('ko-KR') });
+        startRealtimeDataListener(currentUser.uid);
+      } catch (e) { alert('수정 실패'); }
+    };
+
+    function renderData(data) {
+      dataList.innerHTML = '';
+      if (!data) { dataList.innerHTML = '<div class="empty">접수된 사건/민원 기록이 없습니다.</div>'; return; }
+      Object.entries(data).reverse().forEach(([id, item]) => {
+        const div = document.createElement('div'); div.className = 'item'; div.id = `item-${id}`;
+        div.innerHTML = `
+          <div>
+            <p class="item-title">${escapeHTML(item.title || '')}</p>
+            <p class="item-content">${escapeHTML(item.content || '')}</p>
+            <div class="item-date">접수: ${item.createdAt || '-'} ${item.updatedAt ? ` / 수정: ${item.updatedAt}` : ''}</div>
+          </div>
+          <div class="item-actions">
+            <button class="edit-btn" onclick="showEditForm('${id}', '${escapeForAttribute(item.title || '')}', '${escapeForAttribute(item.content || '')}')">수정</button>
+            <button class="delete-btn" onclick="deleteData('${id}')">삭제</button>
+          </div>`;
+        dataList.appendChild(div);
+      });
+    }
+
+    window.showEditForm = function(id, title, content) {
+      document.getElementById(`item-${id}`).innerHTML = `
+        <div class="edit-box">
+          <input id="edit-title-${id}" type="text" value="${title}" />
+          <input id="edit-content-${id}" type="text" value="${content}" />
+          <button class="save-btn" onclick="updateData('${id}')">저장</button>
+          <button class="cancel-btn" onclick="document.location.reload()">취소</button>
+        </div>`;
+    };
+
+    refreshBtn.addEventListener('click', () => { if (currentUser) startRealtimeDataListener(currentUser.uid); });
+
+    // --- [3] 생성형 AI API 연동 (Apps Script) ---
+    askAiBtn.addEventListener('click', async () => {
+      const question = aiQuestionInput.value.trim();
+      if (!question) { alert('상담받을 질문을 입력하세요.'); return; }
+
+      try {
+        askAiBtn.disabled = true; askAiBtn.textContent = '경찰관 분석 중...';
+        aiAnswerBox.textContent = '경찰 AI가 법률 및 대처법 가이드를 작성하고 있습니다. 잠시만 기다려주세요...';
+        ttsBtn.disabled = true;
+
+        // 경찰관 페르소나 주입을 위해 질문을 약간 가공하여 서버에 보냅니다.
+        const policeContextQuestion = `당신은 대한민국 친절하고 정확한 AI 경찰관입니다. 다음 민원에 대해 전문적이고 안심할 수 있게 답변해주세요: ${question}`;
+
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ question: policeContextQuestion })
+        });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        aiAnswerBox.textContent = data.answer || '답변을 생성하지 못했습니다.';
+        ttsBtn.disabled = false; // 답변이 성공적으로 오면 TTS 버튼 활성화
+      } catch (error) {
+        aiAnswerBox.textContent = '상담 서버 연결 실패: ' + error.message;
+      } finally {
+        askAiBtn.disabled = false; askAiBtn.textContent = 'AI 자문 구하기';
+      }
+    });
+
+    // --- [4] TTS (음성 합성) 기능 활용하기 ---
+    ttsBtn.addEventListener('click', () => {
+      const textToRead = aiAnswerBox.textContent;
+      if (!textToRead || textToRead.startsWith('아직 상담') || textToRead.startsWith('경찰 AI가')) return;
+
+      // 이미 읽고 있다면 멈추고, 안 읽고 있다면 새로 읽기
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        ttsBtn.textContent = '🔊 답변 읽어주기';
+      } else {
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        utterance.lang = 'ko-KR'; // 한국어 설정
+        utterance.rate = 1.0;     // 속도 조절
+
+        utterance.onstart = () => { ttsBtn.textContent = '⏹️ 재생 중지'; };
+        utterance.onend = () => { ttsBtn.textContent = '🔊 답변 읽어주기'; };
+        utterance.onerror = () => { ttsBtn.textContent = '🔊 답변 읽어주기'; };
+
+        window.speechSynthesis.speak(utterance);
+      }
+    });
+
+    // 편의 기능들 (문자 이스케이프 및 에러메시지 번역)
+    function escapeHTML(text) { return String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+    function escapeForAttribute(text) { return escapeHTML(text).replaceAll('`', '&#096;'); }
+    function getKoreanErrorMessage(code) {
+      switch (code) {
+        case 'auth/email-already-in-use': return '이미 가입된 이메일입니다.';
+        case 'auth/invalid-email': return '이메일 형식이 올바르지 않습니다.';
+        case 'auth/weak-password': return '비밀번호는 6자리 이상이어야 합니다.';
+        case 'auth/invalid-credential': return '이메일 또는 비밀번호를 다시 확인하세요.';
+        default: return `오류 발생: ${code}`;
+      }
+    }
+  </script>
+</body>
+</html>
