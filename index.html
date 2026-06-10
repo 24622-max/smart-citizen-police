@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>스마트 시민경찰 AI 법률 자문 서비스</title>
+  <title>AI TTS 음성 변환기</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
@@ -16,7 +13,6 @@
       font-family: Arial, sans-serif;
       color: #333;
     }
-
     .container {
       width: min(900px, 92%);
       margin: 40px auto;
@@ -25,362 +21,192 @@
       padding: 28px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
     }
-
-    h1 {
-      margin: 0 0 8px;
-      text-align: center;
-      font-size: 28px;
-      color: #1a237e;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #777;
-      margin-bottom: 24px;
-      font-size: 14px;
-    }
-
+    h1 { margin: 0 0 8px; text-align: center; font-size: 28px; }
+    .subtitle { text-align: center; color: #777; margin-bottom: 24px; font-size: 14px; }
     .info {
-      padding: 14px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-      background: #e8f5e9;
-      color: #2e7d32;
-      font-size: 14px;
-      line-height: 1.6;
+      padding: 14px; margin-bottom: 20px; border-radius: 14px;
+      background: #e8f5e9; color: #2e7d32; font-size: 14px; line-height: 1.6;
     }
-
-    .chat-box {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .option-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-
-    select, input {
-      height: 44px;
-      padding: 0 12px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-    }
-
+    .option-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    select, input { height: 44px; padding: 0 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; }
     textarea {
-      width: 100%;
-      min-height: 140px;
-      resize: vertical;
-      padding: 16px;
-      border: 1px solid #ddd;
-      border-radius: 16px;
-      font-size: 16px;
-      line-height: 1.5;
-      outline: none;
-      font-family: Arial, sans-serif;
+      width: 100%; min-height: 180px; resize: vertical; padding: 16px;
+      border: 1px solid #ddd; border-radius: 16px; font-size: 16px; line-height: 1.5;
+      outline: none; font-family: Arial, sans-serif;
     }
-
-    textarea:focus, select:focus, input:focus {
-      border-color: #42a5f5;
-      box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
-    }
-
-    .button-row {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-
+    textarea:focus, select:focus, input:focus { border-color: #42a5f5; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); }
+    .label { font-weight: bold; margin-bottom: 6px; }
+    .button-row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 14px; }
     button, .download-link {
-      border: none;
-      border-radius: 12px;
-      padding: 0 18px;
-      height: 46px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.15s;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      border: none; border-radius: 12px; padding: 0 18px; height: 46px; font-size: 15px;
+      cursor: pointer; transition: 0.15s; font-weight: bold; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
     }
-
-    button:hover, .download-link:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-      transform: none;
-    }
-
-    .ask-btn {
-      background: #1e88e5;
-      color: white;
-    }
-
-    .tts-btn {
-      background: #ffb300;
-      color: #333;
-    }
-
-    .clear-btn {
-      background: #b0bec5;
-      color: white;
-    }
-
-    .download-link {
-      background: #7e57c2;
-      color: white;
-    }
-
-    .answer-box {
-      min-height: 220px;
-      padding: 18px;
-      border-radius: 18px;
-      background: #f7f9fb;
-      border: 1px solid #edf1f5;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .status {
-      min-height: 24px;
-      color: #555;
-      font-size: 14px;
-    }
-
-    .label {
-      font-weight: bold;
-      margin-bottom: 6px;
-      color: #1a237e;
-    }
-
-    .result-box {
-      margin-top: 10px;
-      padding: 18px;
-      border-radius: 18px;
-      background: #f0f4f8;
-      border: 1px solid #d0d7de;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 5px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .help {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #777;
-      line-height: 1.6;
-    }
-
+    button:hover, .download-link:hover { transform: translateY(-2px); opacity: 0.9; }
+    button:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
+    .make-btn { background: #42a5f5; color: white; }
+    .clear-btn { background: #b0bec5; color: white; }
+    .download-link { background: #7e57c2; color: white; }
+    .hidden { display: none; }
+    .status { min-height: 24px; margin-top: 14px; color: #555; font-size: 14px; }
+    .result-box { margin-top: 20px; padding: 18px; border-radius: 18px; background: #f7f9fb; border: 1px solid #edf1f5; }
+    audio { width: 100%; margin-top: 10px; }
+    .help { margin-top: 12px; font-size: 13px; color: #777; line-height: 1.6; }
     @media (max-width: 700px) {
-      .option-box {
-        grid-template-columns: 1fr;
-      }
-      .button-row {
-        justify-content: stretch;
-      }
-      button, .download-link {
-        width: 100%;
-      }
+      .option-box { grid-template-columns: 1fr; }
+      .button-row { justify-content: stretch; }
+      button, .download-link { width: 100%; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>스마트 시민경찰 AI 법률 자문</h1>
-    <div class="subtitle">GitHub Pages + Google Apps Script + OpenAI API 연동</div>
+    <h1>AI TTS 음성 변환기</h1>
+    <div class="subtitle">텍스트를 AI 음성 mp3 파일로 변환합니다</div>
 
     <div class="info">
-      현재 구조: GitHub Pages 화면 → Google Apps Script 서버 → OpenAI API → 답변 및 음성 반환<br />
-      API Key는 소스코드에 포함되지 않으므로 보안 경고 없이 안전하게 작동합니다.
+      현재 구조: GitHub Pages 화면 → Google Apps Script 서버 → OpenAI TTS API → mp3 음성 반환
     </div>
 
-    <div class="label">🔊 AI 경찰관 음성 설정</div>
     <div class="option-box">
       <select id="modelSelect">
-        <option value="tts-1">tts-1 (빠른 생성)</option>
-        <option value="tts-1-hd">tts-1-hd (고품질)</option>
+        <option value="tts-1">tts-1 빠른 생성</option>
+        <option value="tts-1-hd">tts-1-hd 고품질</option>
       </select>
+
       <select id="voiceSelect">
-        <option value="alloy">alloy (남성형)</option>
-        <option value="echo">echo (부드러운 남성)</option>
-        <option value="nova">nova (여성형)</option>
-        <option value="shimmer">shimmer (지적인 여성)</option>
+        <option value="alloy">alloy</option>
+        <option value="echo">echo</option>
+        <option value="fable">fable</option>
+        <option value="onyx">onyx</option>
+        <option value="nova">nova</option>
+        <option value="shimmer">shimmer</option>
       </select>
-      <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="속도 (기본 1.0)" />
+
+      <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="속도" />
     </div>
 
-    <div class="chat-box">
-      <div>
-        <div class="label">사건 진술 (질문)</div>
-        <textarea id="questionInput" placeholder="발생한 사건을 상세히 입력하세요. 예: 중고거래 사기를 당했습니다. 어떻게 대처하나요?"></textarea>
-      </div>
+    <div>
+      <div class="label">변환할 텍스트</div>
+      <textarea id="textInput" placeholder="음성으로 바꿀 문장을 입력하세요."></textarea>
+    </div>
 
+    <div class="button-row">
+      <button class="clear-btn" id="clearBtn">초기화</button>
+      <button class="make-btn" id="makeBtn">음성 만들기</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div id="resultBox" class="result-box hidden">
+      <div class="label">생성된 음성</div>
+      <audio id="audioPlayer" controls></audio>
       <div class="button-row">
-        <button class="clear-btn" id="clearBtn">초기화</button>
-        <button class="ask-btn" id="askBtn">AI 자문 구하기</button>
-        <button class="tts-btn" id="ttsBtn" disabled>답변 읽어주기</button>
+        <a id="downloadLink" class="download-link" href="#" download="tts-audio.mp3">mp3 다운로드</a>
       </div>
+    </div>
 
-      <div id="status" class="status"></div>
-
-      <div>
-        <div class="label">AI 종합 법률 자문 결과</div>
-        <div id="answerBox" class="answer-box">아직 분석된 자문 내역이 없습니다. 사건을 입력한 후 [AI 자문 구하기]를 눌러주세요.</div>
-      </div>
-
-      <div id="resultBox" class="result-box hidden">
-        <div class="label">🔊 AI 경찰관 음성 가이드</div>
-        <audio id="audioPlayer" controls></audio>
-        <div class="button-row" style="margin-top: 10px;">
-          <a id="downloadLink" class="download-link" href="#" download="police-guide.mp3">MP3 다운로드</a>
-        </div>
-      </div>
-
-      <div class="help">
-        단축키: 입력창에서 Ctrl + Enter를 누르면 자문이 시작됩니다.<br />
-        오류가 발생하면 Apps Script 배포 권한과 스크립트 내부 `type` 분기 코드를 확인하세요.
-      </div>
+    <div class="help">
+      속도는 0.25부터 4.0까지 조절할 수 있습니다.
     </div>
   </div>
 
   <script>
-    // 🔗 사용하시는 Google Apps Script URL 주소입니다.
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybMRcqbUdmda3RLvUT8Bd7JK0DxMUBCGyTwkFEOK9I_O76XtsY2Y0niQF3ANiY9RHc/exec';
+    // ⚠️ 여기에 방금 구글에서 새로 배포한 웹 앱 URL 주소를 넣어주세요!
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQVcp2y5-w0kjZ9VBpl7jXFpRq-phOkxUiIBriMhdILD8tjXL0JRz9SpTDAoo71Mnt/exec';
 
-    const questionInput = document.getElementById('questionInput');
-    const answerBox = document.getElementById('answerBox');
-    const statusBox = document.getElementById('status');
-    const askBtn = document.getElementById('askBtn');
-    const ttsBtn = document.getElementById('ttsBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    
+    const textInput = document.getElementById('textInput');
     const modelSelect = document.getElementById('modelSelect');
     const voiceSelect = document.getElementById('voiceSelect');
     const speedInput = document.getElementById('speedInput');
-    
+    const makeBtn = document.getElementById('makeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const statusBox = document.getElementById('status');
     const resultBox = document.getElementById('resultBox');
     const audioPlayer = document.getElementById('audioPlayer');
     const downloadLink = document.getElementById('downloadLink');
 
-    let savedAnswerText = "";
-
-    askBtn.addEventListener('click', askChatGPT);
-    ttsBtn.addEventListener('click', makeSpeech);
+    makeBtn.addEventListener('click', makeSpeech);
     clearBtn.addEventListener('click', clearPage);
 
-    questionInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && event.ctrlKey) {
-        askChatGPT();
-      }
+    textInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) { makeSpeech(); }
     });
 
-    // 1. ChatGPT에게 사건 자문 구하기 (텍스트 요청)
-    async function askChatGPT() {
-      const question = questionInput.value.trim();
-      if (!question) { alert('사건 내용을 입력해주세요.'); return; }
+    async function makeSpeech() {
+      const text = textInput.value.trim();
+      const model = modelSelect.value;
+      const voice = voiceSelect.value;
+      const speed = Number(speedInput.value || 1.0);
+
+      if (!text) {
+        alert('음성으로 변환할 텍스트를 입력해주세요.');
+        return;
+      }
 
       try {
-        askBtn.disabled = true;
-        askBtn.textContent = '분석 중...';
-        answerBox.textContent = '사건 경위를 분석 중입니다. 잠시만 기다려주세요...';
-        statusBox.textContent = 'Apps Script 서버에 자문 요청을 보내는 중...';
+        setLoading(true);
         resultBox.classList.add('hidden');
-        ttsBtn.disabled = true;
+        statusBox.textContent = '서버에 음성 변환을 요청 중입니다...';
 
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
-            type: 'text', // ⭐️ 서버가 인식할 수 있도록 타입 지정
-            question: question
+            text: text,   // 'text' 필드로 매핑하여 구글 서버로 발송
+            model: model,
+            voice: voice,
+            speed: speed
           })
         });
 
         const data = await response.json();
-        if (data.error) throw new Error(data.error);
 
-        savedAnswerText = data.answer || '답변을 가져오지 못했습니다.';
-        answerBox.textContent = savedAnswerText;
-        statusBox.textContent = '⚖️ AI 자문 완료!';
-        ttsBtn.disabled = false; // 답변이 나오면 읽어주기 활성화
+        if (data.error) { throw new Error(data.error); }
+        if (!data.audioBase64) { throw new Error('음성 데이터를 받지 못했습니다.'); }
+
+        const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
+        audioPlayer.src = audioUrl;
+        downloadLink.href = audioUrl;
+        downloadLink.download = makeFileName();
+        resultBox.classList.remove('hidden');
+        statusBox.textContent = '음성 생성 완료!';
       } catch (error) {
         console.error(error);
-        answerBox.textContent = '오류가 발생했습니다.\n\n' + error.message;
         statusBox.textContent = '요청 실패';
+        alert('오류가 발생했습니다:\n' + error.message);
       } finally {
-        askBtn.disabled = false;
-        askBtn.textContent = 'AI 자문 구하기';
+        setLoading(false);
       }
     }
 
-    // 2. 받은 답변을 오디오 가이드로 변환하기 (TTS 음성 요청)
-    async function makeSpeech() {
-      if (!savedAnswerText) return;
-
-      try {
-        ttsBtn.disabled = true;
-        ttsBtn.textContent = '음성 생성 중...';
-        statusBox.textContent = 'Apps Script 서버에서 음성 인코딩 중...';
-
-        const response = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({
-            type: 'tts', // ⭐️ 서버가 음성 생성 작업임을 인식할 수 있도록 처리
-            text: savedAnswerText,
-            model: modelSelect.value,
-            voice: voiceSelect.value,
-            speed: Number(speedInput.value || 1.0)
-          })
-        });
-
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
-
-        // Apps Script에서 보내준 Base64 오디오 데이터를 브라우저에서 재생 가능한 Blob 파일로 변환
-        const audioBytes = Uint8Array.from(atob(data.audioBase64), c => c.charCodeAt(0));
-        const audioBlob = new Blob([audioBytes], { type: 'audio/mp3' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-
-        audioPlayer.src = audioUrl;
-        downloadLink.href = audioUrl;
-        resultBox.classList.remove('hidden');
-        statusBox.textContent = '🔊 음성 생성 완료! 아래 재생 버튼을 누르세요.';
-      } catch (error) {
-        console.error(error);
-        statusBox.textContent = '음성 변환 실패';
-        alert('오류 발생: ' + error.message);
-      } finally {
-        ttsBtn.disabled = false;
-        ttsBtn.textContent = '답변 읽어주기';
+    function base64ToAudioUrl(base64, mimeType) {
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) { byteNumbers[i] = slice.charCodeAt(i); }
+        byteArrays.push(new Uint8Array(byteNumbers));
       }
+      return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
+    }
+
+    function makeFileName() {
+      const now = new Date();
+      return `tts-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.mp3`;
+    }
+
+    function setLoading(isLoading) {
+      makeBtn.disabled = isLoading;
+      makeBtn.textContent = isLoading ? '생성 중...' : '음성 만들기';
     }
 
     function clearPage() {
-      questionInput.value = '';
-      answerBox.textContent = '아직 분석된 자문 내역이 없습니다. 사건을 입력한 후 [AI 자문 구하기]를 눌러주세요.';
+      textInput.value = '';
       statusBox.textContent = '';
-      savedAnswerText = '';
-      ttsBtn.disabled = true;
-      resultBox.classList.add('hidden');
       audioPlayer.removeAttribute('src');
+      downloadLink.href = '#';
+      resultBox.classList.add('hidden');
     }
   </script>
 </body>
