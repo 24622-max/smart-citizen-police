@@ -112,8 +112,8 @@
   </div>
 
   <script>
-    // ⚠️ [주의] 새로 배포하신 '구글 웹 앱 URL' 주소를 여기에 붙여넣어 주세요!
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzU7mx3gHJ1QZ4soB-mxN4H1n11Wn9TkMMIxIIBVMDA11ukvL26DShKQwWNL_daey7/exec';
+    // ⚠️ 새로 배포하신 구글 웹 앱 URL 주소를 여기에 넣어주세요!
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQVcp2y5-w0kjZ9VBpl7jXFpRq-phOkxUiIBriMhdILD8tjXL0JRz9SpTDAoo71Mnt/exec';
 
     const textInput = document.getElementById('textInput');
     const modelSelect = document.getElementById('modelSelect');
@@ -149,10 +149,9 @@
         resultBox.classList.add('hidden');
         statusBox.textContent = '서버에 음성 변환을 요청 중입니다...';
 
-        // 데이터 전송 시 CORS와 GAS 리다이렉션을 가장 안정적으로 우회하는 무형식 post 방식 사용
+        // 성공했던 예전 코드와 동일한 fetch 방식으로 데이터 전송
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          mode: 'cors', // CORS 활성화
           body: JSON.stringify({
             text: text,
             model: model,
@@ -166,6 +165,7 @@
         if (data.error) { throw new Error(data.error); }
         if (!data.audioBase64) { throw new Error('음성 데이터를 받지 못했습니다.'); }
 
+        // 받아온 Base64 데이터를 오디오 파일 객체(Blob) URL로 변환하여 할당
         const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
         audioPlayer.src = audioUrl;
         downloadLink.href = audioUrl;
