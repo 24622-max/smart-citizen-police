@@ -3,111 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI TTS 음성 변환기</title>
+  <title>경찰 AI 민원 어시스턴트</title>
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      background: linear-gradient(135deg, #1565c0, #e3f2fd);
       font-family: Arial, sans-serif;
       color: #333;
     }
+
     .container {
       width: min(900px, 92%);
       margin: 40px auto;
       background: #ffffff;
       border-radius: 24px;
       padding: 28px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     }
-    h1 { margin: 0 0 8px; text-align: center; font-size: 28px; }
-    .subtitle { text-align: center; color: #777; margin-bottom: 24px; font-size: 14px; }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 28px;
+      color: #0d47a1;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
     .info {
-      padding: 14px; margin-bottom: 20px; border-radius: 14px;
-      background: #e8f5e9; color: #2e7d32; font-size: 14px; line-height: 1.6;
+      padding: 14px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      background: #e8eaf6;
+      color: #1a237e;
+      font-size: 14px;
+      line-height: 1.6;
+      border-left: 5px solid #0d47a1;
     }
-    .option-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    select, input { height: 44px; padding: 0 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; }
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
     textarea {
-      width: 100%; min-height: 180px; resize: vertical; padding: 16px;
-      border: 1px solid #ddd; border-radius: 16px; font-size: 16px; line-height: 1.5;
-      outline: none; font-family: Arial, sans-serif;
+      width: 100%;
+      min-height: 140px;
+      resize: vertical;
+      padding: 16px;
+      border: 1px solid #ccc;
+      border-radius: 16px;
+      font-size: 16px;
+      line-height: 1.5;
+      outline: none;
+      font-family: Arial, sans-serif;
     }
-    textarea:focus, select:focus, input:focus { border-color: #42a5f5; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); }
-    .label { font-weight: bold; margin-bottom: 6px; }
-    .button-row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 14px; }
-    button, .download-link {
-      border: none; border-radius: 12px; padding: 0 18px; height: 46px; font-size: 15px;
-      cursor: pointer; transition: 0.15s; font-weight: bold; text-decoration: none;
-      display: inline-flex; align-items: center; justify-content: center;
+
+    textarea:focus {
+      border-color: #0d47a1;
+      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.15);
     }
-    button:hover, .download-link:hover { transform: translateY(-2px); opacity: 0.9; }
-    button:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
-    .make-btn { background: #42a5f5; color: white; }
-    .clear-btn { background: #b0bec5; color: white; }
-    .download-link { background: #7e57c2; color: white; }
-    .hidden { display: none; }
-    .status { min-height: 24px; margin-top: 14px; color: #555; font-size: 14px; }
-    .result-box { margin-top: 20px; padding: 18px; border-radius: 18px; background: #f7f9fb; border: 1px solid #edf1f5; }
-    audio { width: 100%; margin-top: 10px; }
-    .help { margin-top: 12px; font-size: 13px; color: #777; line-height: 1.6; }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0 24px;
+      height: 46px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    .ask-btn {
+      background: #0d47a1;
+      color: white;
+    }
+
+    .clear-btn {
+      background: #b0bec5;
+      color: white;
+    }
+
+    .answer-box {
+      min-height: 220px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #fcfdfe;
+      border: 1px solid #dcdfe6;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 15px;
+    }
+
+    .status {
+      min-height: 24px;
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .help {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
     @media (max-width: 700px) {
-      .option-box { grid-template-columns: 1fr; }
-      .button-row { justify-content: stretch; }
-      button, .download-link { width: 100%; }
+      .button-row {
+        justify-content: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>AI TTS 음성 변환기</h1>
-    <div class="subtitle">텍스트를 AI 음성 mp3 파일로 변환합니다</div>
+    <h1>경찰 AI 민원 어시스턴트</h1>
+    <div class="subtitle">대한민국 경찰 관련 업무 및 절차 안내 가이드</div>
 
     <div class="info">
-      현재 구조: GitHub Pages 화면 → Google Apps Script 서버 → OpenAI TTS API → mp3 음성 반환
+      본 시스템은 OpenAI API를 활용한 <strong>경찰 민원 전용 AI 안내봇</strong>입니다.<br />
+      고소/고발 절차, 교통 민원, 유실물 센터 이용법 등 궁금한 점을 질문해 주세요.
     </div>
 
-    <div class="option-box">
-      <select id="modelSelect">
-        <option value="tts-1">tts-1 빠른 생성</option>
-        <option value="tts-1-hd">tts-1-hd 고품질</option>
-      </select>
-
-      <select id="voiceSelect">
-        <option value="alloy">alloy</option>
-        <option value="echo">echo</option>
-        <option value="fable">fable</option>
-        <option value="onyx">onyx</option>
-        <option value="nova">nova</option>
-        <option value="shimmer">shimmer</option>
-      </select>
-
-      <input id="speedInput" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="속도" />
-    </div>
-
-    <div>
-      <div class="label">변환할 텍스트</div>
-      <textarea id="textInput" placeholder="음성으로 바꿀 문장을 입력하세요."></textarea>
-    </div>
-
-    <div class="button-row">
-      <button class="clear-btn" id="clearBtn">초기화</button>
-      <button class="make-btn" id="makeBtn">음성 만들기</button>
-    </div>
-
-    <div id="status" class="status"></div>
-
-    <div id="resultBox" class="result-box hidden">
-      <div class="label">생성된 음성</div>
-      <audio id="audioPlayer" controls></audio>
-      <div class="button-row">
-        <a id="downloadLink" class="download-link" href="#" download="tts-audio.mp3">mp3 다운로드</a>
+    <div class="chat-box">
+      <div>
+        <div class="label">질문 입력</div>
+        <textarea id="questionInput" placeholder="경찰 민원이나 법률 관련 질문을 입력하세요. &#10;예: 물건을 잃어버렸는데 유실물 접수는 어떻게 하나요?"></textarea>
       </div>
-    </div>
 
-    <div class="help">
-      속도는 0.25부터 4.0까지 조절할 수 있습니다.
+      <div class="button-row">
+        <button class="clear-btn" id="clearBtn">초기화</button>
+        <button class="ask-btn" id="askBtn">질문하기</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div>
+        <div class="label">경찰 AI 답변</div>
+        <div id="answerBox" class="answer-box">아직 답변이 없습니다. 질문을 입력한 후 '질문하기' 버튼을 눌러주세요.</div>
+      </div>
+
+      <div class="help">
+        단축키: 질문 입력창에서 <strong>Ctrl + Enter</strong>를 누르면 바로 질문이 전송됩니다.<br />
+        ※ 본 답변은 AI가 생성한 참고용 안내이므로, 법적 효력을 갖는 공식 유권해석을 원하시면 112나 민원실(182)로 문의하시기 바랍니다.
+      </div>
     </div>
   </div>
 
@@ -115,100 +197,68 @@
     // ⚠️ 새로 배포하신 구글 웹 앱 URL 주소를 여기에 넣어주세요!
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQVcp2y5-w0kjZ9VBpl7jXFpRq-phOkxUiIBriMhdILD8tjXL0JRz9SpTDAoo71Mnt/exec';
 
-    const textInput = document.getElementById('textInput');
-    const modelSelect = document.getElementById('modelSelect');
-    const voiceSelect = document.getElementById('voiceSelect');
-    const speedInput = document.getElementById('speedInput');
-    const makeBtn = document.getElementById('makeBtn');
-    const clearBtn = document.getElementById('clearBtn');
+    const questionInput = document.getElementById('questionInput');
+    const answerBox = document.getElementById('answerBox');
     const statusBox = document.getElementById('status');
-    const resultBox = document.getElementById('resultBox');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const downloadLink = document.getElementById('downloadLink');
+    const askBtn = document.getElementById('askBtn');
+    const clearBtn = document.getElementById('clearBtn');
 
-    makeBtn.addEventListener('click', makeSpeech);
+    askBtn.addEventListener('click', askChatGPT);
     clearBtn.addEventListener('click', clearPage);
 
-    textInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && event.ctrlKey) { makeSpeech(); }
+    questionInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        askChatGPT();
+      }
     });
 
-    async function makeSpeech() {
-      const text = textInput.value.trim();
-      const model = modelSelect.value;
-      const voice = voiceSelect.value;
-      const speed = Number(speedInput.value || 1.0);
+    async function askChatGPT() {
+      const question = questionInput.value.trim();
 
-      if (!text) {
-        alert('음성으로 변환할 텍스트를 입력해주세요.');
+      if (!question) {
+        alert('질문을 입력해주세요.');
         return;
       }
 
       try {
         setLoading(true);
-        resultBox.classList.add('hidden');
-        statusBox.textContent = '서버에 음성 변환을 요청 중입니다...';
+        answerBox.textContent = '경찰 AI가 답변을 분석하고 작성하는 중입니다...';
+        statusBox.textContent = 'Apps Script 서버에 요청을 전송했습니다.';
 
-        // 성공했던 예전 코드와 동일한 fetch 방식으로 데이터 전송
+        // 성공했던 챗봇 코드 방식 그대로 요청을 발송합니다.
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
-            text: text,
-            model: model,
-            voice: voice,
-            speed: speed
+            question: question
           })
         });
 
         const data = await response.json();
 
-        if (data.error) { throw new Error(data.error); }
-        if (!data.audioBase64) { throw new Error('음성 데이터를 받지 못했습니다.'); }
+        if (data.error) {
+          throw new Error(data.error);
+        }
 
-        // 받아온 Base64 데이터를 오디오 파일 객체(Blob) URL로 변환하여 할당
-        const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
-        audioPlayer.src = audioUrl;
-        downloadLink.href = audioUrl;
-        downloadLink.download = makeFileName();
-        resultBox.classList.remove('hidden');
-        statusBox.textContent = '음성 생성 완료!';
+        answerBox.textContent = data.answer || '답변을 가져오지 못했습니다.';
+        statusBox.textContent = '답변 생성 완료';
       } catch (error) {
         console.error(error);
+        answerBox.textContent = '오류가 발생했습니다.\n\n' + error.message;
         statusBox.textContent = '요청 실패';
-        alert('오류가 발생했습니다:\n' + error.message);
       } finally {
         setLoading(false);
       }
     }
 
-    function base64ToAudioUrl(base64, mimeType) {
-      const byteCharacters = atob(base64);
-      const byteArrays = [];
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) { byteNumbers[i] = slice.charCodeAt(i); }
-        byteArrays.push(new Uint8Array(byteNumbers));
-      }
-      return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
-    }
-
-    function makeFileName() {
-      const now = new Date();
-      return `tts-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.mp3`;
-    }
-
     function setLoading(isLoading) {
-      makeBtn.disabled = isLoading;
-      makeBtn.textContent = isLoading ? '생성 중...' : '음성 만들기';
+      askBtn.disabled = isLoading;
+      askBtn.textContent = isLoading ? '답변 생성 중...' : '질문하기';
     }
 
     function clearPage() {
-      textInput.value = '';
+      questionInput.value = '';
+      answerBox.textContent = '아직 답변이 없습니다. 질문을 입력한 후 \'질문하기\' 버튼을 눌러주세요.';
       statusBox.textContent = '';
-      audioPlayer.removeAttribute('src');
-      downloadLink.href = '#';
-      resultBox.classList.add('hidden');
     }
   </script>
 </body>
