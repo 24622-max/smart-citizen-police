@@ -3,20 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>경찰 AI 민원 어시스턴트</title>
+  <title>경찰 AI 민원 어시스턴트 (음성 지원)</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
       background: linear-gradient(135deg, #1565c0, #e3f2fd);
       font-family: Arial, sans-serif;
       color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
+    /* 로그인 상자 스타일 */
+    .login-container {
+      width: min(400px, 90%);
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .login-container h2 { color: #0d47a1; margin-bottom: 20px; }
+    .login-container input {
+      width: 100%; height: 46px; padding: 0 12px; margin-bottom: 15px;
+      border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; text-align: center;
+    }
+    .login-btn {
+      width: 100%; background: #0d47a1; color: white; border: none;
+      border-radius: 12px; height: 46px; font-size: 16px; font-weight: bold; cursor: pointer;
+    }
+
+    /* 메인 컨테이너 스타일 */
     .container {
       width: min(900px, 92%);
       margin: 40px auto;
@@ -25,195 +45,172 @@
       padding: 28px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     }
-
-    h1 {
-      margin: 0 0 8px;
-      text-align: center;
-      font-size: 28px;
-      color: #0d47a1;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #555;
-      margin-bottom: 24px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
+    h1 { margin: 0 0 8px; text-align: center; font-size: 28px; color: #0d47a1; }
+    .subtitle { text-align: center; color: #555; margin-bottom: 24px; font-size: 14px; font-weight: bold; }
     .info {
-      padding: 14px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-      background: #e8eaf6;
-      color: #1a237e;
-      font-size: 14px;
-      line-height: 1.6;
-      border-left: 5px solid #0d47a1;
+      padding: 14px; margin-bottom: 20px; border-radius: 14px;
+      background: #e8eaf6; color: #1a237e; font-size: 14px; line-height: 1.6; border-left: 5px solid #0d47a1;
     }
-
-    .chat-box {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
+    
+    /* 음성 옵션 설정 박스 */
+    .option-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    select, .speed-input { height: 44px; padding: 0 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; }
+    
     textarea {
-      width: 100%;
-      min-height: 140px;
-      resize: vertical;
-      padding: 16px;
-      border: 1px solid #ccc;
-      border-radius: 16px;
-      font-size: 16px;
-      line-height: 1.5;
-      outline: none;
-      font-family: Arial, sans-serif;
+      width: 100%; min-height: 140px; resize: vertical; padding: 16px;
+      border: 1px solid #ccc; border-radius: 16px; font-size: 16px; line-height: 1.5; outline: none;
     }
-
-    textarea:focus {
-      border-color: #0d47a1;
-      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.15);
+    textarea:focus, select:focus, .speed-input:focus { border-color: #0d47a1; box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.15); }
+    
+    .button-row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 10px; }
+    button, .download-link {
+      border: none; border-radius: 12px; padding: 0 24px; height: 46px; font-size: 15px;
+      cursor: pointer; transition: 0.15s; font-weight: bold; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
     }
-
-    .button-row {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 0 24px;
-      height: 46px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.15s;
-      font-weight: bold;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-      transform: none;
-    }
-
-    .ask-btn {
-      background: #0d47a1;
-      color: white;
-    }
-
-    .clear-btn {
-      background: #b0bec5;
-      color: white;
-    }
-
+    button:hover, .download-link:hover { transform: translateY(-2px); opacity: 0.9; }
+    button:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
+    
+    .ask-btn { background: #0d47a1; color: white; }
+    .clear-btn { background: #b0bec5; color: white; }
+    .download-link { background: #7e57c2; color: white; margin-top: 10px; width: 100%; }
+    
+    .result-section { margin-top: 20px; }
     .answer-box {
-      min-height: 220px;
-      padding: 18px;
-      border-radius: 18px;
-      background: #fcfdfe;
-      border: 1px solid #dcdfe6;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 15px;
+      min-height: 180px; padding: 18px; border-radius: 18px; background: #fcfdfe;
+      border: 1px solid #dcdfe6; line-height: 1.7; white-space: pre-wrap; word-break: break-word; font-size: 15px;
     }
-
-    .status {
-      min-height: 24px;
-      color: #666;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .label {
-      font-weight: bold;
-      margin-bottom: 6px;
-      color: #333;
-    }
-
-    .help {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #666;
-      line-height: 1.6;
-    }
+    .audio-box { margin-top: 14px; padding: 14px; background: #f1f3f4; border-radius: 14px; }
+    audio { width: 100%; margin-top: 6px; }
+    
+    .status { min-height: 24px; color: #666; font-size: 14px; font-weight: 500; margin-top: 10px; }
+    .label { font-weight: bold; margin-bottom: 6px; color: #333; }
+    .help { margin-top: 12px; font-size: 13px; color: #666; line-height: 1.6; }
+    .hidden { display: none !important; }
 
     @media (max-width: 700px) {
-      .button-row {
-        justify-content: stretch;
-      }
-
-      button {
-        width: 100%;
-      }
+      .option-box { grid-template-columns: 1fr; }
+      .button-row { justify-content: stretch; }
+      button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <div id="loginPage" class="login-container">
+    <h2>경찰 AI 시스템 접속</h2>
+    <input type="password" id="passwordInput" placeholder="접속 비밀번호를 입력하세요" />
+    <button class="login-btn" id="loginBtn">로그인</button>
+  </div>
+
+  <div id="mainPage" class="container hidden">
     <h1>경찰 AI 민원 어시스턴트</h1>
-    <div class="subtitle">대한민국 경찰 관련 업무 및 절차 안내 가이드</div>
+    <div class="subtitle">대한민국 경찰 관련 업무 안내 및 AI 음성 서비스</div>
 
     <div class="info">
-      본 시스템은 OpenAI API를 활용한 <strong>경찰 민원 전용 AI 안내봇</strong>입니다.<br />
-      고소/고발 절차, 교통 민원, 유실물 센터 이용법 등 궁금한 점을 질문해 주세요.
+      질문을 입력하시면 AI 대답과 함께 **안내 음성(MP3)**이 실시간으로 생성됩니다.<br />
+      하단의 성우 음성 종류와 말하기 속도(0.25 ~ 4.0)를 자유롭게 변경해 보세요.
     </div>
 
-    <div class="chat-box">
-      <div>
-        <div class="label">질문 입력</div>
-        <textarea id="questionInput" placeholder="경찰 민원이나 법률 관련 질문을 입력하세요. &#10;예: 물건을 잃어버렸는데 유실물 접수는 어떻게 하나요?"></textarea>
-      </div>
+    <div class="option-box">
+      <select id="modelSelect">
+        <option value="tts-1">tts-1 빠른 음성생성</option>
+        <option value="tts-1-hd">tts-1-hd 고품질 음성생성</option>
+      </select>
 
-      <div class="button-row">
-        <button class="clear-btn" id="clearBtn">초기화</button>
-        <button class="ask-btn" id="askBtn">질문하기</button>
-      </div>
+      <select id="voiceSelect">
+        <option value="alloy">alloy (기본 성우)</option>
+        <option value="echo">echo (부드러운 남성)</option>
+        <option value="fable">fable (서사적인 톤)</option>
+        <option value="onyx">onyx (묵직한 남성)</option>
+        <option value="nova">nova (또렷한 여성)</option>
+        <option value="shimmer">shimmer (지적인 여성)</option>
+      </select>
 
-      <div id="status" class="status"></div>
+      <input id="speedInput" class="speed-input" type="number" min="0.25" max="4.0" step="0.05" value="1.0" placeholder="속도 (1.0)" />
+    </div>
 
-      <div>
-        <div class="label">경찰 AI 답변</div>
-        <div id="answerBox" class="answer-box">아직 답변이 없습니다. 질문을 입력한 후 '질문하기' 버튼을 눌러주세요.</div>
-      </div>
+    <div>
+      <div class="label">질문 입력</div>
+      <textarea id="questionInput" placeholder="경찰 민원이나 법률 관련 질문을 입력하세요. &#10;예: 물건을 잃어버렸는데 유실물 접수는 어떻게 하나요?"></textarea>
+    </div>
 
-      <div class="help">
-        단축키: 질문 입력창에서 <strong>Ctrl + Enter</strong>를 누르면 바로 질문이 전송됩니다.<br />
-        ※ 본 답변은 AI가 생성한 참고용 안내이므로, 법적 효력을 갖는 공식 유권해석을 원하시면 112나 민원실(182)로 문의하시기 바랍니다.
+    <div class="button-row">
+      <button class="clear-btn" id="clearBtn">초기화</button>
+      <button class="ask-btn" id="askBtn">질문하기</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div class="result-section">
+      <div class="label">경찰 AI 답변</div>
+      <div id="answerBox" class="answer-box">아직 답변이 없습니다. 질문을 입력한 후 '질문하기' 버튼을 눌러주세요.</div>
+      
+      <div id="audioPlayerBox" class="audio-box hidden">
+        <div class="label">🔊 답변 안내 음성 듣기</div>
+        <audio id="audioPlayer" controls></audio>
+        <a id="downloadLink" class="download-link" href="#" download="police-guide.mp3">mp3 음성 파일 다운로드</a>
       </div>
+    </div>
+
+    <div class="help">
+      단축키: 질문 입력창에서 <strong>Ctrl + Enter</strong>를 누르면 바로 질문이 전송됩니다.<br />
+      속도는 0.25부터 4.0까지 조절할 수 있습니다.
     </div>
   </div>
 
   <script>
-    // ⚠️ [필수] 새로 배포하신 본인의 구글 웹 앱 URL 주소를 여기에 꼭 채워 넣어주세요!
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZIYtEtgj1wSVdWIyT_UYGk1h3n3InYMMRJYaxI_Am9tftU14718RgWBbCK9Y8wrLW6g/exec';
+    // ⚠️ 본인의 구글 웹 앱 URL 주소를 여기에 넣어주세요.
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHMVB601oujPErRja_r77hxrO38UlelfQhyk3WjJeF2xE4IjKcMsZZkYJ9KkgemijDUg/exec';
+    
+    // 설정하실 비밀번호 지정 (원하는 비밀번호로 바꾸셔도 됩니다)
+    const SITE_PASSWORD = '1234'; 
+
+    const loginPage = document.getElementById('loginPage');
+    const mainPage = document.getElementById('mainPage');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
 
     const questionInput = document.getElementById('questionInput');
+    const modelSelect = document.getElementById('modelSelect');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const speedInput = document.getElementById('speedInput');
     const answerBox = document.getElementById('answerBox');
+    const audioPlayerBox = document.getElementById('audioPlayerBox');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const downloadLink = document.getElementById('downloadLink');
     const statusBox = document.getElementById('status');
     const askBtn = document.getElementById('askBtn');
     const clearBtn = document.getElementById('clearBtn');
 
-    askBtn.addEventListener('click', askChatGPT);
-    clearBtn.addEventListener('click', clearPage);
+    // 로그인 로직
+    loginBtn.addEventListener('click', checkPassword);
+    passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPassword(); });
 
-    questionInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && event.ctrlKey) {
-        askChatGPT();
+    function checkPassword() {
+      if (passwordInput.value === SITE_PASSWORD) {
+        loginPage.classList.add('hidden');
+        mainPage.classList.remove('hidden');
+        document.body.style.display = 'block'; // 레이아웃 해제
+      } else {
+        alert('비밀번호가 올바르지 않습니다.');
+        passwordInput.value = '';
+        passwordInput.focus();
       }
+    }
+
+    // 메인 로직
+    askBtn.addEventListener('click', askPoliceAI);
+    clearBtn.addEventListener('click', clearPage);
+    questionInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && event.ctrlKey) { askPoliceAI(); }
     });
 
-    async function askChatGPT() {
+    async function askPoliceAI() {
       const question = questionInput.value.trim();
+      const model = modelSelect.value;
+      const voice = voiceSelect.value;
+      const speed = Number(speedInput.value || 1.0);
 
       if (!question) {
         alert('질문을 입력해주세요.');
@@ -222,24 +219,37 @@
 
       try {
         setLoading(true);
-        answerBox.textContent = '경찰 AI가 답변을 분석하고 작성하는 중입니다...';
-        statusBox.textContent = 'Apps Script 서버에 요청을 전송했습니다.';
+        audioPlayerBox.classList.add('hidden');
+        answerBox.textContent = '경찰 AI가 답변을 분석하고 음성 파일을 생성하는 중입니다... (약 5~10초 소요)';
+        statusBox.textContent = '서버에 시스템 요청을 전달 중...';
 
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
-            question: question
+            question: question,
+            model: model,
+            voice: voice,
+            speed: speed
           })
         });
 
         const data = await response.json();
 
-        if (data.error) {
-          throw new Error(data.error);
+        if (data.error) { throw new Error(data.error); }
+
+        // 1. 텍스트 화면에 표출
+        answerBox.textContent = data.answer || '답변을 가져오지 못했습니다.';
+        
+        // 2. Base64 음성 데이터를 오디오 플레이어에 세팅
+        if (data.audioBase64) {
+          const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
+          audioPlayer.src = audioUrl;
+          downloadLink.href = audioUrl;
+          downloadLink.download = `police-audio-${new Date().getTime()}.mp3`;
+          audioPlayerBox.classList.remove('hidden');
         }
 
-        answerBox.textContent = data.answer || '답변을 가져오지 못했습니다.';
-        statusBox.textContent = '답변 생성 완료';
+        statusBox.textContent = '답변 및 안내 음성 생성 완료!';
       } catch (error) {
         console.error(error);
         answerBox.textContent = '오류가 발생했습니다.\n\n' + error.message;
@@ -249,15 +259,30 @@
       }
     }
 
+    function base64ToAudioUrl(base64, mimeType) {
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) { byteNumbers[i] = slice.charCodeAt(i); }
+        byteArrays.push(new Uint8Array(byteNumbers));
+      }
+      return URL.createObjectURL(new Blob(byteArrays, { type: mimeType }));
+    }
+
     function setLoading(isLoading) {
       askBtn.disabled = isLoading;
-      askBtn.textContent = isLoading ? '답변 생성 중...' : '질문하기';
+      askBtn.textContent = isLoading ? '생성 중...' : '질문하기';
     }
 
     function clearPage() {
       questionInput.value = '';
       answerBox.textContent = '아직 답변이 없습니다. 질문을 입력한 후 \'질문하기\' 버튼을 눌러주세요.';
       statusBox.textContent = '';
+      audioPlayer.removeAttribute('src');
+      downloadLink.href = '#';
+      audioPlayerBox.classList.add('hidden');
     }
   </script>
 </body>
