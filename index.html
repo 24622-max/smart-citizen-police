@@ -194,8 +194,8 @@
   </div>
 
   <script>
-    // ⚠️ 새로 배포하신 구글 웹 앱 URL 주소를 여기에 넣어주세요!
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQVcp2y5-w0kjZ9VBpl7jXFpRq-phOkxUiIBriMhdILD8tjXL0JRz9SpTDAoo71Mnt/exec';
+    // ⚠️ [필수] 새로 배포하신 본인의 구글 웹 앱 URL 주소를 여기에 꼭 채워 넣어주세요!
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZIYtEtgj1wSVdWIyT_UYGk1h3n3InYMMRJYaxI_Am9tftU14718RgWBbCK9Y8wrLW6g/exec';
 
     const questionInput = document.getElementById('questionInput');
     const answerBox = document.getElementById('answerBox');
@@ -225,7 +225,6 @@
         answerBox.textContent = '경찰 AI가 답변을 분석하고 작성하는 중입니다...';
         statusBox.textContent = 'Apps Script 서버에 요청을 전송했습니다.';
 
-        // 성공했던 챗봇 코드 방식 그대로 요청을 발송합니다.
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
